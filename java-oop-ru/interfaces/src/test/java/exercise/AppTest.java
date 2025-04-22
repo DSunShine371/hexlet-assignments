@@ -2,6 +2,9 @@ package exercise;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +60,61 @@ class AppTest {
     }
 
     // BEGIN
-    
+    @Test
+    void testLength() {
+        CharSequence reversed = new ReversedSequence("abcdef");
+        assertEquals(6, reversed.length());
+        assertEquals(0, new ReversedSequence("").length());
+    }
+
+    @Test
+    void testCharAtValidIndex() {
+        CharSequence reversed = new ReversedSequence("abcdef");
+        assertEquals('f', reversed.charAt(0));
+        assertEquals('e', reversed.charAt(1));
+        assertEquals('d', reversed.charAt(2));
+        assertEquals('c', reversed.charAt(3));
+        assertEquals('b', reversed.charAt(4));
+        assertEquals('a', reversed.charAt(5));
+    }
+
+    @Test
+    void testCharAtInvalidIndex() {
+        CharSequence reversed = new ReversedSequence("abc");
+        assertThrows(IndexOutOfBoundsException.class, () -> reversed.charAt(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> reversed.charAt(3));
+    }
+
+    @Test
+    void testSubSequenceValidRange() {
+        CharSequence reversed = new ReversedSequence("abcdef");
+        assertEquals("edc", reversed.subSequence(1, 4).toString());
+        assertEquals("f", reversed.subSequence(0, 1).toString());
+        assertEquals("ba", reversed.subSequence(4, 6).toString());
+        assertEquals("", reversed.subSequence(2, 2).toString());
+    }
+
+    @Test
+    void testSubSequenceEmptyString() {
+        CharSequence reversed = new ReversedSequence("");
+        assertEquals("", reversed.subSequence(0, 0).toString());
+        assertThrows(IndexOutOfBoundsException.class, () -> reversed.subSequence(0, 1));
+    }
+
+    @Test
+    void testSubSequenceInvalidRange() {
+        CharSequence reversed = new ReversedSequence("abc");
+        assertThrows(IndexOutOfBoundsException.class, () -> reversed.subSequence(-1, 2));
+        assertThrows(IndexOutOfBoundsException.class, () -> reversed.subSequence(0, 4));
+        assertThrows(IllegalArgumentException.class, () -> reversed.subSequence(2, 1));
+    }
+
+    @Test
+    void testToString() {
+        CharSequence reversed = new ReversedSequence("abcdef");
+        assertEquals("fedcba", reversed.toString());
+        assertEquals("", new ReversedSequence("").toString());
+        assertEquals("racecar", new ReversedSequence("racecar").toString());
+    }
     // END
 }
