@@ -5,7 +5,7 @@ import java.util.Set;
 
 // BEGIN
 public class App {
-    private static String DEFAULT_VALUE = "default";
+    private static final String DEFAULT_VALUE = "default";
 
     public static void swapKeyValue(KeyValueStorage storage) {
         Set<String> keys = new HashSet<>(storage.toMap().keySet());
