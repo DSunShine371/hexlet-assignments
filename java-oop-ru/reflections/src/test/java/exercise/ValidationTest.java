@@ -43,9 +43,11 @@ class ValidationTest {
         Map<String, String> errors = Validator.advancedValidate(addressWithShortCountry);
 
         assertTrue(errors.containsKey("country"), "Карта ошибок должна содержать ошибку для 'country'");
-        assertEquals("length less than 3", errors.get("country"), "Сообщение об ошибке для 'country' должно указывать на нарушение минимальной длины 3");
+        assertEquals("length less than 3", errors.get("country"),
+                "Сообщение об ошибке для 'country' должно указывать на нарушение минимальной длины 3");
         assertTrue(errors.containsKey("street"), "Карта ошибок должна содержать ошибку для 'street'");
-        assertEquals("can not be null", errors.get("street"), "Сообщение об ошибке для 'street' должно быть 'can not be null'");
+        assertEquals("can not be null", errors.get("street"),
+                "Сообщение об ошибке для 'street' должно быть 'can not be null'");
         assertEquals(2, errors.size(), "Карта ошибок должна содержать только две ошибки");
     }
     // END
