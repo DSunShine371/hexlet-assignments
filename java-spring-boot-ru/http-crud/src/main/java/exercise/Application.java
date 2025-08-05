@@ -19,7 +19,6 @@ import exercise.model.Post;
 @SpringBootApplication
 @RestController
 public class Application {
-    // Хранилище добавленных постов
     private List<Post> posts = Data.getPosts();
 
     public static void main(String[] args) {
@@ -32,7 +31,7 @@ public class Application {
         return posts.stream().limit(limit).toList();
     }
 
-    @PostMapping("/posts") // Создание страницы
+    @PostMapping("/posts")
     public Post create(@RequestBody Post post) {
         posts.add(post);
         return post;
