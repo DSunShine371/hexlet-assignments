@@ -1,8 +1,10 @@
 package exercise;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import exercise.component.UserProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import  org.springframework.beans.factory.annotation.Autowired;
 
 import exercise.model.User;
-import exercise.component.UserProperties;
 
 @SpringBootApplication
 @RestController
@@ -21,7 +22,19 @@ public class Application {
     private List<User> users = Data.getUsers();
 
     // BEGIN
-    
+    @Autowired
+    private UserProperties adminsInfo;
+
+    @GetMapping("/admins")
+    public List<String> indexAdmins() {
+        HashSet<String> adminEmails = new HashSet<>(adminsInfo.getAdmins());
+
+        return users.stream()
+                .filter(user -> adminEmails.contains(user.getEmail()))
+                .map(User::getName)
+                .sorted()
+                .toList();
+    }
     // END
 
     @GetMapping("/users")
