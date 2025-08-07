@@ -1,0 +1,8 @@
+---
+spring:
+  # BEGIN
+  
+  # END
+  output:
+    ansi:
+      enabled: always
