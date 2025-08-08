@@ -32,15 +32,24 @@ public class ProductsController {
     }
 
     // BEGIN
-    
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product create(@RequestBody Product newProduct) {
+        List<Product> products = productRepository.findAll();
+
+        if (products.contains(newProduct)) {
+            throw new ResourceAlreadyExistsException("Product with name = " + newProduct.getTitle()
+                    + " and price = " + newProduct.getPrice() + " already exists");
+        }
+        return productRepository.save(newProduct);
+
+    }
     // END
 
     @GetMapping(path = "/{id}")
     public Product show(@PathVariable long id) {
-        var product =  productRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
-
-        return product;
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
     }
 
     @PutMapping(path = "/{id}")
