@@ -32,15 +32,28 @@ public class TasksController {
 
     @GetMapping(path = "/{id}")
     public Task show(@PathVariable long id) {
-
-        var task =  taskRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found"));
-
-        return task;
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found"));
     }
 
     // BEGIN
-    
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Task create(@RequestBody Task newTask) {
+        return taskRepository.save(newTask);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Task update(@PathVariable Long id, @RequestBody Task newTask) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found"));
+
+        task.setTitle(newTask.getTitle());
+        task.setDescription(newTask.getDescription());
+
+        return taskRepository.save(task);
+    }
     // END
 
     @DeleteMapping(path = "/{id}")
