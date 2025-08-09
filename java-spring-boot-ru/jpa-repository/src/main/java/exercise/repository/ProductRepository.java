@@ -12,8 +12,6 @@ import org.springframework.data.domain.Sort;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     // BEGIN
-    List<Product> findAllByPrice(int price);
-
     @Query("SELECT p FROM Product p WHERE (:min is null or p.price >= :min) AND (:max is null or p.price <= :max)")
     List<Product> findByPriceRange(@Param("min") Integer min, @Param("max") Integer max, Sort sort);
     // END
