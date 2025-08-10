@@ -19,5 +19,43 @@ import exercise.repository.CommentRepository;
 import exercise.exception.ResourceNotFoundException;
 
 // BEGIN
+@RestController
+@RequestMapping("/comments") // Используем /comments для этого контроллера
+public class CommentsController {
 
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @GetMapping("")
+    public List<Comment> index() {
+        return commentRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Comment show(@PathVariable long id) {
+        return commentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment with id " + id + " not found"));
+    }
+
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Comment create(@RequestBody Comment comment) {
+        return commentRepository.save(comment);
+    }
+
+    @PutMapping("/{id}")
+    public Comment update(@PathVariable long id, @RequestBody Comment commentData) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment with id " + id + " not found"));
+        comment.setBody(commentData.getBody());
+        comment.setPostId(commentData.getPostId());
+        return commentRepository.save(comment);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable long id) {
+        commentRepository.deleteById(id);
+    }
+}
 // END

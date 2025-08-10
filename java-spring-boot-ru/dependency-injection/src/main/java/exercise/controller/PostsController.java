@@ -19,5 +19,47 @@ import exercise.repository.PostRepository;
 import exercise.exception.ResourceNotFoundException;
 
 // BEGIN
+@RestController
+@RequestMapping("/posts") // Используем /posts для этого контроллера
+public class PostsController {
 
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @GetMapping("")
+    public List<Post> index() {
+        return postRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Post show(@PathVariable long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post with id " + id + " not found"));
+    }
+
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post create(@RequestBody Post post) {
+        return postRepository.save(post);
+    }
+
+    @PutMapping("/{id}")
+    public Post update(@PathVariable long id, @RequestBody Post postData) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post with id " + id + " not found"));
+        post.setTitle(postData.getTitle());
+        post.setBody(postData.getBody());
+        return postRepository.save(post);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable long id) {
+        postRepository.deleteById(id);
+        commentRepository.deleteByPostId(id);
+    }
+}
 // END
