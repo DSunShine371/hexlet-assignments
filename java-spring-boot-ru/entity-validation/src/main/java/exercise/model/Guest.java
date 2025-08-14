@@ -1,6 +1,5 @@
 package exercise.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -20,8 +19,6 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 
-
-
 @Entity
 @Table(name = "guests")
 @EntityListeners(AuditingEntityListener.class)
@@ -34,7 +31,20 @@ public class Guest {
     private long id;
 
     // BEGIN
-    
+    @NotBlank
+    private String name;
+
+    @Email
+    private String email;
+
+    @Pattern(regexp = "^\\+[0-9]{11,13}$")
+    private String phoneNumber;
+
+    @Pattern(regexp = "^[0-9]{4}$")
+    private String clubCard;
+
+    @Future
+    private LocalDate cardValidUntil;
     // END
 
     @CreatedDate
