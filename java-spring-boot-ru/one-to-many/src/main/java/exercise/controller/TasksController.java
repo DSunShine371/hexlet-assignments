@@ -58,26 +58,22 @@ public class TasksController {
         User user = userRepository.findById(taskData.getAssigneeId())
                 .orElseThrow(() -> new ResourceNotFoundException("User " + taskData.getAssigneeId() + " not found"));
         task.setAssignee(user);
-        user.getTasks().add(task);
-        userRepository.save(user);
 
-        Task savedTask = taskRepository.findById(task.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found after creation"));
-
-        return taskMapper.map(savedTask);
+        return taskMapper.map(taskRepository.save(task));
     }
 
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public TaskDTO update(@RequestBody @Valid TaskUpdateDTO taskData, @PathVariable Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task with id " + id + " not found"));
+
         User user = userRepository.findById(taskData.getAssigneeId())
                 .orElseThrow(() -> new ResourceNotFoundException("User " + taskData.getAssigneeId() + " not found"));
         taskMapper.update(taskData, task);
         task.setAssignee(user);
-        taskRepository.save(task);
 
-        return taskMapper.map(task);
+        return taskMapper.map(taskRepository.save(task));
     }
 
     @DeleteMapping("/{id}")
