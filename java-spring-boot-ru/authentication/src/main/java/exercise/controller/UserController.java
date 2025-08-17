@@ -1,6 +1,7 @@
 package exercise.controller;
 
 import exercise.mapper.UserMapper;
+import exercise.utils.UserUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,9 @@ public class UserController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserUtils userUtils;
 
     @GetMapping(path = "")
     public List<UserDTO> index() {
